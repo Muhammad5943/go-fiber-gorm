@@ -103,7 +103,7 @@ func UpdateUser(c *fiber.Ctx) error {
 	userRequest := new(request.UserUpdateRequest)
 	if err := c.BodyParser(userRequest); err != nil {
 		return c.Status(400).JSON(fiber.Map{
-			"message": "user request is bad",
+			"message": "user has bad request",
 		})
 	}
 
