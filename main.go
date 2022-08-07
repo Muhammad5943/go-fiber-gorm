@@ -1,27 +1,24 @@
 package main
 
 import (
-	"log"
-
+	"github.com/Muhammad5943/go-fiber-gorm/database"
+	"github.com/Muhammad5943/go-fiber-gorm/database/migration"
 	"github.com/Muhammad5943/go-fiber-gorm/route"
 	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
 )
 
-func loadenv() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
-	}
-}
-
 func main() {
-	//Loading Environmental Variable
-	loadenv()
+	// Initial Database
+	database.DatabaseInit()
+	// Run migration
+	migration.RunMigration()
 
+	// Initial fiberApp
 	app := fiber.New()
 
 	// Initial Route
 	route.RouteInit(app)
 
+	// Running App
 	app.Listen(":3000")
 }
