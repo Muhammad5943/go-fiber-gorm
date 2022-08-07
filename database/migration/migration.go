@@ -14,7 +14,7 @@ func RunMigration() {
 	/* To Migrate database */
 	err := database.DB.AutoMigrate(&entity.User{})
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 
 	fmt.Println("Database Migrated")

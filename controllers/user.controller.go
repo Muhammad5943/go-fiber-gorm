@@ -62,7 +62,7 @@ func CreateUser(c *fiber.Ctx) error {
 	// hashing password
 	hashedPassword, err := utils.HashingPassword(user.Password)
 	if err != nil {
-		log.Fatal("Error :", err)
+		log.Print("Error :", err)
 		return c.Status(500).JSON(fiber.Map{
 			"status":  500,
 			"message": "Internal server error",
