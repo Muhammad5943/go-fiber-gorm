@@ -3,6 +3,7 @@ package route
 import (
 	"github.com/Muhammad5943/go-fiber-gorm/config"
 	"github.com/Muhammad5943/go-fiber-gorm/controllers"
+	authenticationController "github.com/Muhammad5943/go-fiber-gorm/controllers/authentication"
 	"github.com/Muhammad5943/go-fiber-gorm/middleware"
 	"github.com/gofiber/fiber/v2"
 )
@@ -15,6 +16,10 @@ func RouteInit(r *fiber.App) {
 
 	api := r.Group("/api") // /api
 	v1 := api.Group("/v1") // /api/v1
+
+	/* Authentication */
+	v1.Post("/register", authenticationController.Register)
+	v1.Post("/login", authenticationController.Login)
 
 	/* User */
 	v1.Get("/users", middleware.AuthMiddleware, controllers.GetUsers)

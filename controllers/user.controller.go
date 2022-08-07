@@ -2,12 +2,14 @@ package controllers
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/Muhammad5943/go-fiber-gorm/database"
 	"github.com/Muhammad5943/go-fiber-gorm/models/entity"
 	"github.com/Muhammad5943/go-fiber-gorm/models/request"
 	"github.com/Muhammad5943/go-fiber-gorm/models/response"
+	"github.com/Muhammad5943/go-fiber-gorm/utils"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
@@ -43,18 +45,32 @@ func CreateUser(c *fiber.Ctx) error {
 	errValidate := validate.Struct(user)
 	if errValidate != nil {
 		return c.Status(400).JSON(fiber.Map{
-			"message": "you may input the bad request",
+			"message": "you might have bad request",
 			"error":   strings.Split(errValidate.Error(), "Key:"),
 		})
 	}
 
 	// Create User
 	newUser := entity.User{
-		Name:    user.Name,
-		Email:   user.Email,
-		Address: user.Address,
-		Phone:   user.Phone,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: user.Password,
+		Address:  user.Address,
+		Phone:    user.Phone,
 	}
+
+	// hashing password
+	hashedPassword, err := utils.HashingPassword(user.Password)
+	if err != nil {
+		log.Fatal("Error :", err)
+		return c.Status(500).JSON(fiber.Map{
+			"status":  500,
+			"message": "Internal server error",
+		})
+	}
+
+	// input heshed password to data
+	newUser.Password = hashedPassword
 
 	// create user
 	errCreateUser := database.DB.Create(&newUser).Error
